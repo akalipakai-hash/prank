@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tugas Sekolah - Video Materi</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Efek layar kedap-kedip saat prank dimulai */
+        .flash-active {
+            animation: blink 0.1s infinite;
+        }
+        @keyframes blink {
+            0% { background-color: white; }
+            50% { background-color: black; }
+            100% { background-color: white; }
+        }
+
+        /* Overlay Awal agar tidak curiga */
+        #start-button {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Container video yang akan lompat-lompat */
+        #moving-box {
+            position: absolute;
+            width: 350px;
+            display: none;
+            z-index: 1000;
+        }
+
+        #idiot-text {
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-button" onclick="launch()">
+        <p>Klik untuk memutar video materi</p>
+    </div>
+
+    <div id="moving-box">
+        <div id="idiot-text">YOU ARE AN IDIOT!</div>
+        <video id="audioVideo" loop width="100%">
+            <source src="https://files.catbox.moe/978v8n.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        const box = document.getElementById('moving-box');
+        const vids = document.getElementById('audioVideo');
+        const text = document.getElementById('idiot-text');
+
+        function launch() {
+            // Hilangkan tombol awal
+            document.getElementById('start-button').style.display = 'none';
+            
+            // Aktifkan efek visual
+            document.body.classList.add('flash-active');
+            box.style.display = 'block';
+            
+            // Putar video & suara
+            vids.play();
+            vids.volume = 1.0;
+
+            // Gerakan video ke seluruh layar secara acak
+            setInterval(() => {
+                const x = Math.floor(Math.random() * (window.innerWidth - box.offsetWidth));
+                const y = Math.floor(Math.random() * (window.innerHeight - box.offsetHeight));
+                box.style.left = x + 'px';
+                box.style.top = y + 'px';
+            }, 80); // Makin kecil angkanya, makin cepat gerakannya
+
+            // Ganti warna teks
+            setInterval(() => {
+                text.style.color = (text.style.color === 'blue') ? 'red' : 'blue';
+            }, 100);
+        }
+
+        // Mencegah penutupan tab secara tidak sengaja
+        window.onbeforeunload = function() {
+            return "Ingin keluar?";
+        };
+    </script>
+</body>
+</html>
